@@ -88,6 +88,7 @@ None. The library has no settings, environment variables or feature flags.
 | Benchmarks | `cargo bench` |
 | Dependency audit | `cargo audit` |
 | Docs checks | `make docs-check` |
+| Oldest supported Rust (1.85) | `make msrv` |
 | Everything CI runs | `make check` |
 
 CI (`.github/workflows/ci.yml`) runs these on every push and pull request to `main`.
@@ -112,4 +113,3 @@ Not applicable: no running service, logs or metrics. Use benchmarks to watch for
 - `pfd_in_bandwidth_dbw_m2` assumes a flat spectrum over the occupied bandwidth.
 - `half_power_beamwidth_deg` uses the empirical 70·λ/D factor, which depends on the illumination taper.
 - No atmospheric, rain or scintillation models yet.
-- No declared minimum supported Rust version (TODO: verify).

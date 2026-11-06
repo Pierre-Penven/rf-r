@@ -2,6 +2,7 @@
 name = "rf-r"
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.85"
 description = "High-performance RF and satellite link budget calculations (dB math, FSPL, C/N, flux density)"
 license = "MIT"
 keywords = ["rf", "satellite", "link-budget", "decibel", "telecom"]

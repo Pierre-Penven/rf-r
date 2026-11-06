@@ -10,7 +10,7 @@ Every function is a few nanoseconds, allocates nothing and has no dependencies.
 
 ## Requirements
 
-- Rust stable toolchain, edition 2024 (install from <https://rustup.rs>)
+- Rust 1.85 or newer (install from <https://rustup.rs>). Running the crate's own tests and benchmarks needs 1.86 or newer.
 - Linux, macOS or Windows
 
 ## Installation
@@ -109,7 +109,7 @@ prints an uplink + downlink + C/I budget, ending with a total C/N of 13.18 dB an
 
 | Problem | Fix |
 |---|---|
-| ``error: failed to parse manifest ... feature `edition2024` is required`` | Update Rust: `rustup update stable` |
+| ``error: failed to parse manifest ... feature `edition2024` is required`` or `rf-r requires rustc 1.85` | Update Rust: `rustup update stable` |
 | A result is `NaN` | An input is negative or `NaN`, e.g. a negative distance or bandwidth |
 | A result is `inf` or `-inf` | An input is zero, e.g. zero bandwidth or zero distance |
 | Results off by 30 dB | dBW and dBm mixed up: use `dbw_to_dbm` / `dbm_to_dbw` |
