@@ -15,6 +15,19 @@ Scope:
 - **Flux**: power flux density (PFD, dBW/m²), PFD in a reference bandwidth (per 4 kHz, per MHz), spreading loss, gain of 1 m², saturation flux density ↔ EIRP
 - **Geometry**: slant range from elevation angle (GEO/LEO), Earth/GEO constants
 
+## Skills
+
+At the start of every task, load **all** relevant skills before planning or coding, without waiting to be asked, and follow each one's checklist:
+
+| Skill | Load when |
+|---|---|
+| `rust-development` | always (any code change) |
+| `unit-testing-coverage` | always (any code change) |
+| `clean-code` | always (any code change) |
+| `secure-development` | adding or updating dependencies (`cargo audit`), CI, input validation |
+| `application-documentation` | README, crate docs, architecture or design notes |
+| `requirements-analysis` | scoping a new feature or calculation (e.g. rain attenuation, ITU-R models) |
+
 ## Commands
 
 ```bash
@@ -25,9 +38,13 @@ cargo clippy --all-targets --all-features -- -D warnings   # lint (must be clean
 cargo doc --no-deps --open                                 # API docs
 cargo bench                                                # criterion benchmarks (benches/)
 cargo test <name>                                          # run a single test
+make check                                                 # everything CI runs: fmt, clippy, test, doc, coverage, audit, docs checks
+make docs-check                                            # required docs, arc42 sections, C4 diagrams, broken links
+bash scripts/docs/new_adr.sh "title"                       # new architecture decision record in docs/adr/
 ```
 
-Before reporting work done, run in order: `cargo fmt --all`, `cargo clippy ... -D warnings`, `cargo test --all-features`, and `cargo doc --no-deps` if public API changed.
+Before reporting work done, run `cargo fmt --all`, then `make check`. All of it must pass, including 100 % line coverage and `cargo audit`.
+When public API, modules or design change, update the README, `docs/` (arc42, C4, technical design) and add an ADR for significant decisions.
 
 ## Layout
 
@@ -45,6 +62,9 @@ src/
 benches/        criterion benchmarks
 tests/          integration tests (full link budget scenarios vs. reference values)
 examples/       worked link budgets (e.g. GEO Ku-band downlink)
+docs/           arc42/architecture.md, c4/ (Mermaid), technical-design.md, adr/
+scripts/docs/   docs checks (check_docs.sh, check_links.py) and new_adr.sh
+.github/        CI workflow (ci.yml) and Dependabot config
 ```
 
 ## Design rules
