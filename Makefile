@@ -1,6 +1,6 @@
-.PHONY: check fmt clippy test doc coverage audit docs-check docs bench
+.PHONY: check fmt clippy test doc coverage audit msrv docs-check docs bench
 
-check: fmt clippy test doc coverage audit docs-check
+check: fmt clippy test doc coverage audit msrv docs-check
 
 fmt:
 	cargo fmt --all --check
@@ -19,6 +19,10 @@ coverage:
 
 audit:
 	cargo audit
+
+# Library only: the dev-only criterion dependency needs Rust 1.86
+msrv:
+	cargo +1.85 check --locked --lib
 
 docs-check:
 	@bash scripts/docs/check_docs.sh

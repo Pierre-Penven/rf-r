@@ -22,7 +22,8 @@ Quality goals, in priority order:
 
 ## 2. Constraints
 
-- Rust, edition 2024, stable toolchain.
+- Rust edition 2024. Minimum supported Rust version (MSRV) 1.85, declared as `rust-version` in `Cargo.toml` and checked in CI ([ADR 0004](../adr/0004-minimum-supported-rust-version-1-85.md)).
+  The dev-only `criterion` dependency needs 1.86, so tests and benchmarks run on stable.
 - No runtime dependencies; dev-only dependencies for benchmarks (`criterion`).
 - `unsafe` code is forbidden (`[lints.rust] unsafe_code = "forbid"`).
 - MIT licence.
@@ -35,7 +36,7 @@ no configuration and no global state. See the [C4 context diagram](../c4/1-conte
 | Neighbour | Interface |
 |---|---|
 | Application developer's Rust program | Calls public functions; Cargo dependency |
-| crates.io / GitHub | Distribution of the source (Cargo git dependency today) |
+| GitHub | Distribution of the source as a Cargo Git dependency (not on crates.io yet) |
 
 ## 4. Solution strategy
 
@@ -84,7 +85,7 @@ All steps are pure function calls; no state is kept between them.
 
 Not applicable at runtime: the crate is compiled into the caller's binary.
 Source is hosted at <https://github.com/Pierre-Penven/rf-r>; CI runs on GitHub Actions (`.github/workflows/ci.yml`).
-TODO: verify whether and when the crate will be published to crates.io.
+The crate is not published to crates.io yet (decision of 2026-11-06); users add it as a Cargo Git dependency.
 
 ## 8. Crosscutting concepts
 
@@ -104,6 +105,7 @@ TODO: verify whether and when the crate will be published to crates.io.
 | [0001](../adr/0001-plain-f64-unit-suffixed-api.md) | Plain `f64` API with unit-suffixed names |
 | [0002](../adr/0002-ln-exp-db-conversion.md) | dB conversion via `ln`/`exp` with precomputed factors |
 | [0003](../adr/0003-stable-log-domain-sums.md) | Max/min-shifted log-domain sums |
+| [0004](../adr/0004-minimum-supported-rust-version-1-85.md) | Minimum supported Rust version 1.85 |
 
 ## 10. Quality requirements
 
@@ -119,7 +121,7 @@ TODO: verify whether and when the crate will be published to crates.io.
 | Risk | Impact | Mitigation |
 |---|---|---|
 | Plain `f64` lets callers mix units (e.g. km passed as m) | Wrong results, no compile error | Unit suffixes in every name; possible typed wrapper layer later |
-| No minimum supported Rust version declared | Users on old toolchains may fail to build | TODO: verify the target MSRV and add a CI job for it |
+| MSRV drift: a change uses a Rust feature newer than 1.85 | Users on 1.85 can no longer build | CI `msrv` job builds the library with 1.85; clippy checks API use against `rust-version` |
 | Spherical Earth model in `geometry` | Up to ~0.1 % slant-range error vs WGS-84 ellipsoid | Documented; ellipsoidal model if needed |
 | No propagation models yet (rain, gases, scintillation) | Users add these losses by hand | Planned: ITU-R P.618 / P.676 / P.838 |
 

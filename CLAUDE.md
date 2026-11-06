@@ -39,6 +39,7 @@ cargo doc --no-deps --open                                 # API docs
 cargo bench                                                # criterion benchmarks (benches/)
 cargo test <name>                                          # run a single test
 make check                                                 # everything CI runs: fmt, clippy, test, doc, coverage, audit, docs checks
+make msrv                                                  # build the library with the oldest supported Rust (1.85)
 make docs-check                                            # required docs, arc42 sections, C4 diagrams, broken links
 bash scripts/docs/new_adr.sh "title"                       # new architecture decision record in docs/adr/
 ```
@@ -82,6 +83,10 @@ scripts/docs/   docs checks (check_docs.sh, check_links.py) and new_adr.sh
 - `log_sum` / `log_sum_all` must be **max-shifted** (`max + 10·log10(Σ 10^((xi-max)/10))`) so they never overflow and stay accurate for widely separated values; use `ln_1p` for the two-term case.
 - Follow IEEE-754 semantics and document them: `to_db(0) = -inf`, negative linear → `NaN`, `-inf` dB is the neutral element of `log_sum`.
 - Combining C/N ratios is an inverse power sum: `cn_tot = -log_sum_all(-cn_i)`.
+
+**Compatibility**
+- MSRV is Rust 1.85 (`rust-version` in Cargo.toml). Don't use std APIs or language features newer than that in `src/`; raising it needs an ADR.
+- Not published to crates.io yet; don't add publish steps until decided.
 
 **Units and naming**
 - Units are encoded in names: `_db`, `_dbw`, `_dbm`, `_dbi`, `_db_k` (G/T), `_dbhz`, `_hz`, `_m`, `_km`, `_k` (kelvin), `_rad`, `_deg`, `_w`.
